@@ -26,7 +26,34 @@ impl Shop {
     /// this store wins, FightResult::Loss if this store loses, and a
     /// FightResult::Tie if both stores win the same number of battles.
     pub fn fight_store(&self, other: &Shop) -> FightResult {
-        todo!()
+        let mut shop1: u64 = 0;
+        let mut shop2: u64 = 0;
+
+        for card1 in self.cards.iter() {
+            for card2 in other.cards.iter() {
+                match card1.fight(card2) {
+                    FightResult::Win => shop1 += 1,
+                    FightResult::Loss => shop2 += 1,
+                    _ => (),
+                }
+            }
+        }
+
+        match (shop1 > shop2, shop1 == shop2) {
+            //why can I not use if statement instead i.e. cargo clippy complains (warning)
+            (true, _) => FightResult::Win,
+            (false, false) => FightResult::Loss,
+            (false, true) => FightResult::Tie,
+        }
+        /*
+        //Preferred Method
+        if shop1 > shop2 {
+            return FightResult::Win;
+        } else if shop1 < shop2 {
+            return FightResult::Loss;
+        }
+        FightResult::Tie
+        */
     }
 }
 

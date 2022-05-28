@@ -1,6 +1,7 @@
 use std::fmt;
 
 use crate::{card::Card, FightResult};
+use std::cmp::Ordering;
 
 pub struct Shop {
     pub cards: Vec<Card>,
@@ -26,7 +27,25 @@ impl Shop {
     /// this store wins, FightResult::Loss if this store loses, and a
     /// FightResult::Tie if both stores win the same number of battles.
     pub fn fight_store(&self, other: &Shop) -> FightResult {
-        todo!()
+        let mut shop1: u64 = 0;
+        let mut shop2: u64 = 0;
+
+        for card1 in self.cards.iter() {
+            for card2 in other.cards.iter() {
+                match card1.fight(card2) {
+                    FightResult::Win => shop1 += 1,
+                    FightResult::Loss => shop2 += 1,
+                    _ => (),
+                }
+            }
+        }
+
+        match shop1.cmp(&shop2) {
+            //Thanks to Jersey for explaining
+            Ordering::Greater => FightResult::Win,
+            Ordering::Less => FightResult::Loss,
+            Ordering::Equal => FightResult::Tie,
+        }
     }
 }
 

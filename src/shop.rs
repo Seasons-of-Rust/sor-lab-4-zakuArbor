@@ -1,6 +1,7 @@
 use std::fmt;
 
 use crate::{card::Card, FightResult};
+use std::cmp::Ordering;
 
 pub struct Shop {
     pub cards: Vec<Card>,
@@ -39,21 +40,12 @@ impl Shop {
             }
         }
 
-        match (shop1 > shop2, shop1 == shop2) {
-            //why can I not use if statement instead i.e. cargo clippy complains (warning)
-            (true, _) => FightResult::Win,
-            (false, false) => FightResult::Loss,
-            (false, true) => FightResult::Tie,
+        match shop1.cmp(&shop2) {
+            //Thanks to Jersey for explaining
+            Ordering::Greater => FightResult::Win,
+            Ordering::Less => FightResult::Loss,
+            Ordering::Equal => FightResult::Tie,
         }
-        /*
-        //Preferred Method
-        if shop1 > shop2 {
-            return FightResult::Win;
-        } else if shop1 < shop2 {
-            return FightResult::Loss;
-        }
-        FightResult::Tie
-        */
     }
 }
 
